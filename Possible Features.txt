@@ -1,0 +1,18 @@
+! Elementary conversion (one elementary unit to another of its dimension)
+	- Distance
+	- Mass
+	- Time
+	-- Temperature
+
+- Basic compound conversion (one compound unit to another of its dimension)
+	- Area
+	- Volume
+	- Speed
+	-- Force
+
+-- Advanced conversion (allow user to compound different units)
+	- Validity check (deny conversion of different dimensions)
+	- Electromagnetic units
+	-- Compound recognition (check for defined compounds: 1/s automatically becomes hertz, etc)
+
+? Binary Nonsense
