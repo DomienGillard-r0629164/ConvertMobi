@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import { StyleSheet, SectionList, Text, View, Button, Alert } from 'react-native';
+import React from 'react';
+import { Component } from 'react';
+import { StyleSheet, SectionList, Text, View, Button, Alert, TextInput, Picker } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 class Converter extends Component {
     constructor(props) {
         super(props);
-        this.state = { leftValue: 1, rightValue: 1};
+        this.state = { leftValue: 1, rightValue: 1 };
     }
 }
 
-export default class App extends React.Component {
+export class DistanceConverter extends React.Component {
   render() {
     return (
       /*
@@ -19,6 +20,10 @@ export default class App extends React.Component {
           </Converter>
         </View>
         */
+       <View>
+        <View>
+          <Button title="Mass Converter" onPress={() => this.goToMassConverter()} />
+        </View>
         <View style={styles.leftward}>
           <Button
           title="meter"
@@ -32,10 +37,55 @@ export default class App extends React.Component {
           />
         </View>
         
-      //</View>
+      </View>
     );
   }
+
+  goToMassConverter(){
+    this.props.navigation.navigate('Mass');
+  }
+
 }
+
+export class MassConverter extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.state = { leftValue: 1, rightValue: 1, leftUnit: "kg", rightUnit: "kg" };
+  }
+
+  render() {
+    return (
+      <View>
+        <View>
+          <Button title="Distance Converter" onPress={() => this.goToDistanceConverter()} />
+        </View>
+        <View>
+          <TextInput onChangeText={(leftValue) => this.setState(leftValue)}/>
+          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
+            <Picker.Item label="Kilogram" value="kg"/>
+            <Picker.Item label="Pound" value="lbs"/>
+          </Picker>
+          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
+            <Picker.Item label="Kilogram" value="kg"/>
+            <Picker.Item label="Pound" value="lbs"/>
+          </Picker>
+          <Text>{this.state.rightValue}</Text>
+        </View>
+      </View>
+    );
+  }
+
+  goToDistanceConverter(){
+    this.props.navigation.navigate('Distance');
+  }
+
+}
+
+export default App = StackNavigator({
+    Distance: {screen: DistanceConverter},
+    Mass: {screen: MassConverter}
+});
 
 const styles = StyleSheet.create({
   default: {
@@ -54,7 +104,7 @@ const styles = StyleSheet.create({
 });
 
 function convert() {
-        return leftValue / rightValue;
+    return leftValue / rightValue;
 }
 
 function panic() {
