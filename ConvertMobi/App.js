@@ -21,7 +21,7 @@ export default class App extends React.Component {
         */
         <View style={styles.leftward}>
           <Button
-          title="metre"
+          title="meter"
           color="#000000"
           onPress={panic}
           />
