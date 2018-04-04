@@ -52,24 +52,24 @@ export class MassConverter extends React.Component {
   {
     super(props);
     this.state = { /*leftValue: 1,*/ rightValue: 1, result: 0, leftUnit: "kg", rightUnit: "kg", units: [
-      ["carats (metric)", "CD", 0.0002],
-      ["cental", "", 45.359237],
-      ["decagrams", "dag", 0.01],
-      ["femtograms", "fg", 1e-18],
-      ["grains", "gr", 0.00006479891],
-      ["grams", "g", 1e-3],
-      ["hectograms", "hg", 0.1],
-      ["hundredweights", "cwt", 50.80234544],
-      ["kilograms", "kg", 1],
-      ["kilotonnes", "kt", 1e6],
-      ["megatonnes", "Mt", 1e9],
-      ["micrograms", "Âµg", 1e-9],
-      ["milligrams", "mg", 1e-6],
-      ["nanograms", "ng", 1e-12],
-      ["ounces (US & UK)", "oz", 0.028349523125],
-      ["pounds (US & UK)", "lbs", 0.45359237],
-      ["stones", "st", 6.35029318],
-      ["tonnes (metric)", "t", 1000]
+      ["Carats (metric)", "CD", 0.0002],
+      ["Cental", "", 45.359237],
+      ["Decagrams", "dag", 0.01],
+      ["Femtograms", "fg", 1e-18],
+      ["Grains", "gr", 0.00006479891],
+      ["Grams", "g", 1e-3],
+      ["Hectograms", "hg", 0.1],
+      ["Hundredweights", "cwt", 50.80234544],
+      ["Kilograms", "kg", 1],
+      ["Kilotonnes", "kt", 1e6],
+      ["Megatonnes", "Mt", 1e9],
+      ["Micrograms", "Âµg", 1e-9],
+      ["Milligrams", "mg", 1e-6],
+      ["Nanograms", "ng", 1e-12],
+      ["Ounces (US & UK)", "oz", 0.028349523125],
+      ["Pounds (US & UK)", "lbs", 0.45359237],
+      ["Stones", "st", 6.35029318],
+      ["Tonnes (metric)", "t", 1000]
       ]
     }
   }
@@ -83,12 +83,14 @@ export class MassConverter extends React.Component {
         <View>
           <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
           <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
-            <Picker.Item label="Kilogram" value="kg"/>
-            <Picker.Item label="Pound" value="lbs"/>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
           </Picker>
           <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
-            <Picker.Item label="Kilogram" value="kg"/>
-            <Picker.Item label="Pound" value="lbs"/>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
           </Picker>
           <Text>{this.state.result}</Text>
           <Button title="Convert" onPress={() => this.convert()} />
