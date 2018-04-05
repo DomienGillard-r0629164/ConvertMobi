@@ -1,7 +1,7 @@
 ! Elementary conversion (one elementary unit to another of its dimension)
-	- Distance
-	- Mass
-	- Time
+	- Distance	Willem
+	- Mass		Domien
+	- Time		Domien
 	-- Temperature
 
 - Basic compound conversion (one compound unit to another of its dimension)
