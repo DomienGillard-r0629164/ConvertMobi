@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import { StyleSheet, SectionList, Text, View, Button, Alert, TextInput, Picker } from 'react-native';
+import { Dimensions, StyleSheet, SectionList, Text, View, Button, Alert, TextInput, Picker } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 class Converter extends Component {
@@ -8,6 +8,58 @@ class Converter extends Component {
         super(props);
         this.state = { leftValue: 1, rightValue: 1 };
     }
+}
+
+export class NavScreen extends React.Component {
+  render() {
+    return (
+      <View style={styles.nav}>
+        <View style={styles.subnav}>
+          <View style={styles.navbutton}>
+            <Button title="Distance Converter" onPress={() => this.goToDistanceConverter()} />
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Area Converter" onPress={() => this.goToAreaConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Speed Converter" onPress={() => this.goToSpeedConverter()}/>
+          </View>
+        </View>
+        <View style={styles.subnav}>
+          <View style={styles.navbutton}>
+            <Button title="Mass Converter" onPress={() => this.goToMassConverter()} />
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Temperature Converter" onPress={() => this.goToTemperatureConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Force Converter" onPress={() => this.goToForceConverter()}/>
+          </View>
+        </View>
+        <View style={styles.subnav}>
+          <View style={styles.navbutton}>
+            <Button title="Time Converter" onPress={() => this.goToTimeConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Volume Converter" onPress={() => this.goToVolumeConverter()}/>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  goToDistanceConverter(){
+    this.props.navigation.navigate('Distance');
+  }
+
+  goToMassConverter(){
+    this.props.navigation.navigate('Mass');
+  }
+
+  goToTimeConverter(){
+    this.props.navigation.navigate('Time');
+  }
+
 }
 
 export class DistanceConverter extends React.Component {
@@ -21,9 +73,6 @@ export class DistanceConverter extends React.Component {
         </View>
         */
        <View>
-        <View>
-          <Button title="Mass Converter" onPress={() => this.goToMassConverter()} />
-        </View>
         <View style={styles.leftward}>
           <Button
           title="meter"
@@ -39,10 +88,6 @@ export class DistanceConverter extends React.Component {
         
       </View>
     );
-  }
-
-  goToMassConverter(){
-    this.props.navigation.navigate('Mass');
   }
 
 }
@@ -78,8 +123,69 @@ export class MassConverter extends React.Component {
     return (
       <View>
         <View>
-          <Button title="Distance Converter" onPress={() => this.goToDistanceConverter()} />
+          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
+          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
+          </Picker>
+          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
+          </Picker>
+          <Text>{this.state.result}</Text>
+          <Button title="Convert" onPress={() => this.convert()} />
         </View>
+      </View>
+    );
+  }
+
+  convert() {
+    var toVal = 0;
+    var fromVal = 0;
+    for(var i = 0; i < this.state.units.length; i++){
+      if(this.state.units[i][1] == this.state.rightUnit){
+        toVal = parseFloat(this.state.units[i][2]);
+      }
+      if(this.state.units[i][1] == this.state.leftUnit){
+        fromVal = parseFloat(this.state.units[i][2]);
+      }
+    }
+    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
+  }
+
+}
+
+export class TimeConverter extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.state = { /*leftValue: 1,*/ rightValue: 1, result: 0, leftUnit: "h", rightUnit: "h", units: [
+      ["centuries", "c", 3153600000],
+      ["days", "d", 86400],
+      ["decades", "de", 315360000],
+      ["femtoseconds", "fs", 1e-15],
+      ["fortnights", "fo", 1209600],
+      ["hours", "h", 3600],
+      ["microseconds", "μs", 1e-6],
+      ["millenia", "mi", 31536000000],
+      ["milliseconds", "ms", 1e-3],
+      ["minutes", "min", 60],
+      ["months (Common)", "mc", 2628000],
+      ["nanoseconds", "ns", 1e-9],
+      ["picoseconds", "ps", 1e-12],
+      ["quarters (Common)", "qu", 7884000],
+      ["seconds", "s", 1],
+      ["shakes", "sh", 1e-8],
+      ["weeks", "we", 604800],
+      ["years (Common)", "y", 31536000],
+    ]}
+  }
+
+  render() {
+    return (
+      <View>
         <View>
           <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
           <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
@@ -113,15 +219,13 @@ export class MassConverter extends React.Component {
     this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
   }
 
-  goToDistanceConverter(){
-    this.props.navigation.navigate('Distance');
-  }
-
 }
 
 export default App = StackNavigator({
+    NavBar: {screen: NavScreen},
     Distance: {screen: DistanceConverter},
-    Mass: {screen: MassConverter}
+    Mass: {screen: MassConverter},
+    Time: {screen: TimeConverter}
 });
 
 const styles = StyleSheet.create({
@@ -137,6 +241,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     marginHorizontal: 10,
+  },
+  nav: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  navbutton: {
+    margin: 5,
+    width: 127
   }
 });
 
