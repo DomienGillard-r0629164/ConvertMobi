@@ -22,18 +22,10 @@ export class NavScreen extends React.Component {
             <Button title="Area Converter" onPress={() => this.goToAreaConverter()}/>
           </View>
           <View style={styles.navbutton}>
-            <Button title="Speed Converter" onPress={() => this.goToSpeedConverter()}/>
-          </View>
-        </View>
-        <View style={styles.subnav}>
-          <View style={styles.navbutton}>
             <Button title="Mass Converter" onPress={() => this.goToMassConverter()} />
           </View>
           <View style={styles.navbutton}>
             <Button title="Temperature Converter" onPress={() => this.goToTemperatureConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Force Converter" onPress={() => this.goToForceConverter()}/>
           </View>
         </View>
         <View style={styles.subnav}>
@@ -42,6 +34,12 @@ export class NavScreen extends React.Component {
           </View>
           <View style={styles.navbutton}>
             <Button title="Volume Converter" onPress={() => this.goToVolumeConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Force Converter" onPress={() => this.goToForceConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Speed Converter" onPress={() => this.goToSpeedConverter()}/>
           </View>
         </View>
       </View>
@@ -58,6 +56,10 @@ export class NavScreen extends React.Component {
 
   goToTimeConverter(){
     this.props.navigation.navigate('Time');
+  }
+
+  goToSpeedConverter(){
+    this.props.navigation.navigate('Speed');
   }
 
 }
@@ -221,11 +223,79 @@ export class TimeConverter extends React.Component {
 
 }
 
+export class SpeedConverter extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.state = { /*leftValue: 1,*/ rightValue: 1, result: 0, leftUnit: "km/h", rightUnit: "km/h", units: [
+      ["centimeters/minute", "c/m", 0.00016666666666666666],
+      ["centimeters/second", "c/s", 0.01],
+      ["feet/hour", "ft/h", 0.00008466683600033866],
+      ["feet/minute", "ft/m", 0.00508],
+      ["feet/second", "ft/s", 0.3048],
+      ["inches/minute", "in/m", 0.0004233341800016934],
+      ["inches/second", "in/s", 0.0254],
+      ["kilometers/hour", "km/h", 0.2777777777777778],
+      ["kilometers/second", "km/s", 1000],
+      ["knots", "kn", 0.5144444444444444444],
+      ["meters/hour", "m/h", 0.0002777777777777778],
+      ["meters/minute", "m/m", 0.016666666666666666],
+      ["meters/second", "m/s", 1],
+      ["miles/hour", "mph", 0.44704],
+      ["miles/minute", "mpm", 26.8224],
+      ["miles/second", "mps", 1609.344],
+      ["speed of light", "sol", 2.9979e8],
+      ["speed of sound", "sos", 343],
+      ["yards/hour", "y/h", 0.000254000508001016],
+      ["yards/minute", "y/m", 0.01524],
+      ["yards/second", "y/s", 0.9144],
+    ]}
+  }
+
+  render() {
+    return (
+      <View>
+        <View>
+          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
+          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
+          </Picker>
+          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
+          </Picker>
+          <Text>{this.state.result}</Text>
+          <Button title="Convert" onPress={() => this.convert()} />
+        </View>
+      </View>
+    );
+  }
+
+  convert() {
+    var toVal = 0;
+    var fromVal = 0;
+    for(var i = 0; i < this.state.units.length; i++){
+      if(this.state.units[i][1] == this.state.rightUnit){
+        toVal = parseFloat(this.state.units[i][2]);
+      }
+      if(this.state.units[i][1] == this.state.leftUnit){
+        fromVal = parseFloat(this.state.units[i][2]);
+      }
+    }
+    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
+  }
+
+}
+
 export default App = StackNavigator({
     NavBar: {screen: NavScreen},
     Distance: {screen: DistanceConverter},
     Mass: {screen: MassConverter},
-    Time: {screen: TimeConverter}
+    Time: {screen: TimeConverter},
+    Speed: {screen: SpeedConverter}
 });
 
 const styles = StyleSheet.create({
@@ -244,11 +314,13 @@ const styles = StyleSheet.create({
   },
   nav: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
   },
   navbutton: {
     margin: 5,
-    width: 127
+    width: 120
   }
 });
 
