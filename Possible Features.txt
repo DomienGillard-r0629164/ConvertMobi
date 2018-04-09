@@ -7,8 +7,8 @@
 - Basic compound conversion (one compound unit to another of its dimension)
 	- Area          Willem
 	- Volume        Willem
-	- Speed
-	-- Force
+	- Speed		Domien
+	-- Force	Domien
 
 -- Advanced conversion (allow user to compound different units)
 	- Validity check (deny conversion of different dimensions)
