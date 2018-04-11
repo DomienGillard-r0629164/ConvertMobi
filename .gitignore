@@ -205,6 +205,6 @@ Temporary Items
 .nfs*
 
 # Custom
-packager-info
+packager-info.json
 
 # End of https://www.gitignore.io/api/reactnative
