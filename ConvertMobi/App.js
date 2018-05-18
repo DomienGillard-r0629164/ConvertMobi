@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { Dimensions, StyleSheet, SectionList, Text, View, Button, Alert, TextInput, Picker } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import {UnitCollection} from './Model';
 
 class Converter extends Component {
     constructor(props) {
@@ -488,28 +489,40 @@ export class TemperatureConverter extends React.Component {
 
   createUnits()
   {
-    let units = {}
+    // let units = {}
 
-    function define_unit(name, symbol, factor, term)
-    {
-      units[name] = { symbol: symbol, factor: factor, term: term};
-    }
+    // function define_unit(name, symbol, factor, term)
+    // {
+    //   units[name] = { symbol: symbol, factor: factor, term: term};
+    // }
 
-    define_unit("Celsius", "°C", 1, 273.15);
-    define_unit("Fahrenheit", "°F", 5/9, 459.67);
-    define_unit("Kelvin", "K", 1, 0);
-    define_unit("Rankine", "°R" , 5/9, 0);
-    define_unit("Réaumure", "°Ré", 5/4, 273.15);
+    // define_unit("Celsius", "°C", 1, 273.15);
+    // define_unit("Fahrenheit", "°F", 5/9, 459.67);
+    // define_unit("Kelvin", "K", 1, 0);
+    // define_unit("Rankine", "°R" , 5/9, 0);
+    // define_unit("Réaumure", "°Ré", 5/4, 273.15);
 
-    return units;
+    // return units;
+
+    return new UnitCollection().temperatures;
   }
 
   render() {
+    let me = this;
+
+    function isValidNumber(s)
+    {
+      return !!/^\d+(\.\d*)?$/.exec(s);
+    }
+
     console.log(`render(): this.state.leftValue = ${this.state.leftValue}`);
+
+    const canConvert = isValidNumber(this.state.leftValue);
+
     return (
       <View>
         <View>
-          <TextInput value={"" + this.state.leftValue} onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
+          <TextInput value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
           <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => { this.setState({leftUnit: itemValue})} }>
             {Object.keys(this.state.units).map((key) => {
               return (<Picker.Item label={key} value={key}/>)
@@ -521,7 +534,7 @@ export class TemperatureConverter extends React.Component {
             })}
           </Picker>
           <Text>{this.state.rightValue}</Text>
-          <Button title="Convert" onPress={() => this.convert()} />
+          <Button title="Convert" onPress={() => this.convert()} disabled={!canConvert} />
         </View>
       </View>
     );
@@ -530,8 +543,8 @@ export class TemperatureConverter extends React.Component {
   convert() {
     console.log(`this.state.units  = ${this.state.units}`);
     console.log(`this.state.rightUnit  = ${this.state.rightUnit}`);
-    const { factor: fromValFactor, term: fromValTerm } = this.state.units[this.state.leftUnit];
-    const { factor: toValFactor, term: toValTerm } = this.state.units[this.state.rightUnit];
+    const { factor: fromValFactor, constant: fromValTerm } = this.state.units[this.state.leftUnit];
+    const { factor: toValFactor, constant: toValTerm } = this.state.units[this.state.rightUnit];
     
     let inKelvin = (parseFloat(this.state.leftValue) + fromValTerm) * fromValFactor;
     this.setState({rightValue: (inKelvin / toValFactor) - toValTerm});
