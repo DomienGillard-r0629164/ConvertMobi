@@ -72,11 +72,7 @@ export class NavScreen extends React.Component {
   goToForceConverter(){
     this.props.navigation.navigate('Force');
   }
-  /*
-  goToTemperatureConverter(){
-    this.props.navigation.navigate('Temperature');
-  }
-  */
+
   goToSpeedExtraConverter(){
     this.props.navigation.navigate('SpeedExtra');
   }
@@ -266,69 +262,20 @@ export class ForceConverter extends Converter {
   }
 
 }
-/*
-export class TemperatureConverter extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {rightValue: 1, result: 0, leftUnit: "Celsius", rightUnit: "Celsius", units: [
-      ["Celsius",    "°C",  'value + 273.15',         'value - 273.15'],
-      ["Fahrenheit", "°F",  '5/9 * (value + 459.67)', '9/5 * value - 459.67'],
-      ["Kelvin",     "K",   '1'],
-      ["Rankine",    "°R",  '5/9 * value',            '9/5 * value'],
-      ["Réaumure",   "°Ré", '5/4 * value + 273.15',   '4/5 * (value - 273.15)']
-    ]}
-  }
 
-  render() {
-    return (
-      <View>
-        <View>
-          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
-          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Text>{this.state.result}</Text>
-          <Button title="Convert" onPress={() => this.convert()} />
-        </View>
-      </View>
-    );
-  }
-
-  convert() {
-    var toVal = 0;
-    var fromVal = 0;
-    for(var i = 0; i < this.state.units.length; i++){
-      if(this.state.units[i][1] == this.state.rightUnit){
-        toVal = parseFloat(this.state.units[i][2]);
-      }
-      if(this.state.units[i][1] == this.state.leftUnit){
-        fromVal = parseFloat(this.state.units[i][2]);
-      }
-    }
-    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
-  }
-}
-*/
 export class ExtraSpeedConverter extends React.Component {
   constructor(props)
   {
     super(props);
     this.state = { /*leftValue: 1,*/ rightValue: 1, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", 
       leftUnitList: [
-        ["centimeters", "cm", 0.01], 
-        ["feet",        "ft", 0.3048],
-        ["inches",      "in", 0.0254], 
-        ["kilometers",  "km", 1000], 
+        ["centimeters", "cm", 100], 
+        ["feet",        "ft", 3.2808],
+        ["inches",      "in", 39.37], 
+        ["kilometers",  "km", 0.001], 
         ["meters",      "m",  1], 
-        ["miles",       "mi", 1609.344], 
-        ["yards",       "yd", 0.9144]
+        ["miles",       "mi", 0.00062], 
+        ["yards",       "yd", 1.0936]
       ],  
       rightUnitList: [ 
         ["seconds", "sec", 1],
@@ -399,10 +346,15 @@ export class ExtraSpeedConverter extends React.Component {
         rightToVal = parseFloat(this.state.rightUnitList[i][2]);
       }
 
+      var u = leftFromVal / rightFromVal;
+      var l = leftToVal / rightToVal;
+
+      var r = this.state.leftValue * u * l;
+
       //var leftPart = parseFloat((this.state.leftValue * leftFromVal) / rightFromVal);
       var rightPart = parseFloat((this.state.leftValue * rightToVal) / leftToVal);
 
-      this.setState({result: rightPart});
+      this.setState({result: r});
     }
 
     /*
@@ -427,7 +379,6 @@ export default App = StackNavigator({
     Time: {screen: TimeConverter},
     Speed: {screen: SpeedConverter},
     Force: {screen: ForceConverter},
-    /*Temperature: {screen: TemperatureConverter},*/
     SpeedExtra: {screen: ExtraSpeedConverter}
 });
 
