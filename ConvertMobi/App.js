@@ -4,13 +4,6 @@ import { Dimensions, StyleSheet, SectionList, Text, View, Button, Alert, TextInp
 import { StackNavigator } from 'react-navigation';
 import {UnitCollection} from './Model';
 
-class Converter extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { leftValue: 1, rightValue: 1 };
-    }
-}
-
 export class NavScreen extends React.Component {
   render() {
     return (
@@ -43,6 +36,20 @@ export class NavScreen extends React.Component {
             <Button title="Speed Converter" onPress={() => this.goToSpeedConverter()}/>
           </View>
         </View>
+        <View style={styles.subnav}>
+          <View style={styles.navbutton}>
+            <Button title="Speed Extra Converter" onPress={() => this.goToSpeedExtraConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Converter" onPress={() => this.goToVolumeConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Converter" onPress={() => this.goToForceConverter()}/>
+          </View>
+          <View style={styles.navbutton}>
+            <Button title="Converter" onPress={() => this.goToSpeedConverter()}/>
+          </View>
+        </View>
       </View>
     );
   }
@@ -70,6 +77,14 @@ export class NavScreen extends React.Component {
   goToForceConverter(){
     this.props.navigation.navigate('Force');
   }
+  /*
+  goToTemperatureConverter(){
+    this.props.navigation.navigate('Temperature');
+  }
+  */
+  goToSpeedExtraConverter(){
+    this.props.navigation.navigate('SpeedExtra');
+  }
 
   goToTemperatureConverter(){
     this.props.navigation.navigate('Temperature');
@@ -81,6 +96,7 @@ export class NavScreen extends React.Component {
 
 }
 
+<<<<<<< HEAD
 export class AreaConverter extends React.Component {
   constructor(props)
   {
@@ -106,6 +122,53 @@ export class AreaConverter extends React.Component {
       ["townships",                  "town",    93239571.972]
     ]}
   }
+=======
+export class Converter extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.state = { /*leftValue: 1,*/ rightValue: 0, result: 0, leftUnit: "", rightUnit: "", units: [] }
+  }
+
+  render() {
+    return (
+      <View>
+        <View>
+          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
+          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item key={this.state.units[key][0]} label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
+          </Picker>
+          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item key={this.state.units[key][0]} label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
+            })}
+          </Picker>
+          <Text>{this.state.result}</Text>
+          <Button title="Convert" onPress={() => this.convert()} />
+        </View>
+      </View>
+    );
+  }
+
+  convert() {
+    var toVal = 0;
+    var fromVal = 0;
+    for(var i = 0; i < this.state.units.length; i++){
+      if(this.state.units[i][1] == this.state.rightUnit){
+        toVal = parseFloat(this.state.units[i][2]);
+      }
+      if(this.state.units[i][1] == this.state.leftUnit){
+        fromVal = parseFloat(this.state.units[i][2]);
+      }
+    }
+    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
+  }
+}
+
+export class DistanceConverter extends React.Component {
+>>>>>>> c613d0633963e5848bdd2b523990f411faaf4a8e
   render() {
     return (
       <View>
@@ -220,7 +283,7 @@ export class LengthConverter extends React.Component {
 
 }
 
-export class MassConverter extends React.Component {
+export class MassConverter extends Converter {
   constructor(props)
   {
     super(props);
@@ -247,45 +310,9 @@ export class MassConverter extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <View>
-        <View>
-          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
-          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Text>{this.state.result}</Text>
-          <Button title="Convert" onPress={() => this.convert()} />
-        </View>
-      </View>
-    );
-  }
-
-  convert() {
-    var toVal = 0;
-    var fromVal = 0;
-    for(var i = 0; i < this.state.units.length; i++){
-      if(this.state.units[i][1] == this.state.rightUnit){
-        toVal = parseFloat(this.state.units[i][2]);
-      }
-      if(this.state.units[i][1] == this.state.leftUnit){
-        fromVal = parseFloat(this.state.units[i][2]);
-      }
-    }
-    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
-  }
-
 }
 
-export class TimeConverter extends React.Component {
+export class TimeConverter extends Converter {
   constructor(props)
   {
     super(props);
@@ -311,45 +338,9 @@ export class TimeConverter extends React.Component {
     ]}
   }
 
-  render() {
-    return (
-      <View>
-        <View>
-          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
-          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Text>{this.state.result}</Text>
-          <Button title="Convert" onPress={() => this.convert()} />
-        </View>
-      </View>
-    );
-  }
-
-  convert() {
-    var toVal = 0;
-    var fromVal = 0;
-    for(var i = 0; i < this.state.units.length; i++){
-      if(this.state.units[i][1] == this.state.rightUnit){
-        toVal = parseFloat(this.state.units[i][2]);
-      }
-      if(this.state.units[i][1] == this.state.leftUnit){
-        fromVal = parseFloat(this.state.units[i][2]);
-      }
-    }
-    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
-  }
-
 }
 
-export class SpeedConverter extends React.Component {
+export class SpeedConverter extends Converter {
   constructor(props)
   {
     super(props);
@@ -378,45 +369,9 @@ export class SpeedConverter extends React.Component {
     ]}
   }
 
-  render() {
-    return (
-      <View>
-        <View>
-          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
-          <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
-            {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={this.state.units[key][0]} value={this.state.units[key][1]}/>)
-            })}
-          </Picker>
-          <Text>{this.state.result}</Text>
-          <Button title="Convert" onPress={() => this.convert()} />
-        </View>
-      </View>
-    );
-  }
-
-  convert() {
-    var toVal = 0;
-    var fromVal = 0;
-    for(var i = 0; i < this.state.units.length; i++){
-      if(this.state.units[i][1] == this.state.rightUnit){
-        toVal = parseFloat(this.state.units[i][2]);
-      }
-      if(this.state.units[i][1] == this.state.leftUnit){
-        fromVal = parseFloat(this.state.units[i][2]);
-      }
-    }
-    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
-  }
-
 }
 
-export class ForceConverter extends React.Component {
+export class ForceConverter extends Converter {
   constructor(props)
   {
     super(props);
@@ -433,6 +388,20 @@ export class ForceConverter extends React.Component {
       ["tonnes force",     "tf",    9806.65],
       ["tons force (UK)",  "tfuk",    9964.01641818352],
       ["tons force (US)",  "tfus",    8896.443230521]
+    ]}
+  }
+
+}
+/*
+export class TemperatureConverter extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {rightValue: 1, result: 0, leftUnit: "Celsius", rightUnit: "Celsius", units: [
+      ["Celsius",    "°C",  'value + 273.15',         'value - 273.15'],
+      ["Fahrenheit", "°F",  '5/9 * (value + 459.67)', '9/5 * value - 459.67'],
+      ["Kelvin",     "K",   '1'],
+      ["Rankine",    "°R",  '5/9 * value',            '9/5 * value'],
+      ["Réaumure",   "°Ré", '5/4 * value + 273.15',   '4/5 * (value - 273.15)']
     ]}
   }
 
@@ -470,6 +439,110 @@ export class ForceConverter extends React.Component {
       }
     }
     this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});
+  }
+}
+*/
+export class ExtraSpeedConverter extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.state = { /*leftValue: 1,*/ rightValue: 1, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", 
+      leftUnitList: [
+        ["centimeters", "cm", 0.01], 
+        ["feet",        "ft", 0.3048],
+        ["inches",      "in", 0.0254], 
+        ["kilometers",  "km", 1000], 
+        ["meters",      "m",  1], 
+        ["miles",       "mi", 1609.344], 
+        ["yards",       "yd", 0.9144]
+      ],  
+      rightUnitList: [ 
+        ["seconds", "sec", 1],
+        ["minutes", "min", 60], 
+        ["hours",   "h",   3600]
+      ]
+    }
+  }
+
+  render() {
+    return (
+      <View>
+        <View>
+          <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
+          <View style={styles.inline}>
+            <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit1} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit1: itemValue})}>
+              {Object.keys(this.state.leftUnitList).map((key) => {
+                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
+              })}
+            </Picker>
+            <Text>/</Text>
+            <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit1} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit1: itemValue})}>
+              {Object.keys(this.state.rightUnitList).map((key) => {
+                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
+                })}
+            </Picker>
+          </View>
+        </View>
+        <View>
+          <View style={styles.inline}>
+            <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit2} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit2: itemValue})}>
+              {Object.keys(this.state.leftUnitList).map((key) => {
+                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
+              })}
+            </Picker>
+            <Text>/</Text>
+            <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit2} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit2: itemValue})}>
+              {Object.keys(this.state.rightUnitList).map((key) => {
+                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
+                })}
+            </Picker>
+          </View>
+          <Text>{this.state.result}</Text>
+          <Button title="Convert" onPress={() => this.convert()} />
+        </View>
+      </View>
+    );
+  }
+
+  convert() {
+    var leftFromVal = 0
+    var rightFromVal = 0;
+    var leftToVal = 0
+    var rightToVal = 0;
+    for(var i = 0; i < this.state.leftUnitList.length; i++){
+      if(this.state.leftUnitList[i][1] == this.state.leftUnit1){
+        leftFromVal = parseFloat(this.state.leftUnitList[i][2]);
+      }
+      if(this.state.leftUnitList[i][1] == this.state.leftUnit2){
+        leftToVal = parseFloat(this.state.leftUnitList[i][2]);
+      }
+    }
+    for(var i = 0; i < this.state.rightUnitList.length; i++){
+      if(this.state.rightUnitList[i][1] == this.state.rightUnit1){
+        rightFromVal = parseFloat(this.state.rightUnitList[i][2]);
+      }
+      if(this.state.rightUnitList[i][1] == this.state.rightUnit2){
+        rightToVal = parseFloat(this.state.rightUnitList[i][2]);
+      }
+
+      //var leftPart = parseFloat((this.state.leftValue * leftFromVal) / rightFromVal);
+      var rightPart = parseFloat((this.state.leftValue * rightToVal) / leftToVal);
+
+      this.setState({result: rightPart});
+    }
+
+    /*
+    var toVal = 0;
+    var fromVal = 0;
+    for(var i = 0; i < this.state.units.length; i++){
+      if(this.state.units[i][1] == this.state.rightUnit){
+        toVal = parseFloat(this.state.units[i][2]);
+      }
+      if(this.state.units[i][1] == this.state.leftUnit){
+        fromVal = parseFloat(this.state.units[i][2]);
+      }
+    }
+    this.setState({result: parseFloat((this.state.leftValue * fromVal) / toVal)});*/
   }
 }
 
@@ -656,7 +729,8 @@ export default App = StackNavigator({
     Speed: {screen: SpeedConverter},
     Force: {screen: ForceConverter},
     Temperature: {screen: TemperatureConverter},
-    Volume: {screen: VolumeConverter}
+    Volume: {screen: VolumeConverter},
+    SpeedExtra: {screen: ExtraSpeedConverter}
 });
 
 const styles = StyleSheet.create({
@@ -682,16 +756,16 @@ const styles = StyleSheet.create({
   navbutton: {
     margin: 5,
     width: 120
+  },
+  leftPicker: {
+    margin: 10,
+    width: 150
+  },
+  rightPicker: {
+    margin: 10,
+    width: 150
+  },
+  inline: {
+    flexDirection: 'row'
   }
 });
-
-function convert() {
-    return leftValue / rightValue;
-}
-
-function panic() {
-    Alert.alert(
-        'PANIC!!!',
-        "Don't panic too hard though. You managed an alert, at least."
-    )
-}
