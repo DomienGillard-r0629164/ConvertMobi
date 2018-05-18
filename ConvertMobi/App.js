@@ -96,7 +96,6 @@ export class NavScreen extends React.Component {
 
 }
 
-<<<<<<< HEAD
 export class AreaConverter extends React.Component {
   constructor(props)
   {
@@ -122,7 +121,8 @@ export class AreaConverter extends React.Component {
       ["townships",                  "town",    93239571.972]
     ]}
   }
-=======
+}
+
 export class Converter extends React.Component {
   constructor(props)
   {
@@ -168,7 +168,6 @@ export class Converter extends React.Component {
 }
 
 export class DistanceConverter extends React.Component {
->>>>>>> c613d0633963e5848bdd2b523990f411faaf4a8e
   render() {
     return (
       <View>
