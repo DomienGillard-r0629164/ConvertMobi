@@ -193,24 +193,24 @@ export class UnitCollection
     {
         this.mass = {};
 
-        UnitCollection.define_unit("carats (metric)", "CD", 0.0002, 0, this.areas);
-        UnitCollection.define_unit("cental", "", 45.359237, 0, this.areas);
-        UnitCollection.define_unit("decagrams", "dag", 0.01, 0, this.areas);
-        UnitCollection.define_unit("femtograms", "fg", 1e-18, 0, this.areas);
-        UnitCollection.define_unit("grains", "gr", 0.00006479891, 0, this.areas);
-        UnitCollection.define_unit("grams", "g", 1e-3, 0, this.areas);
-        UnitCollection.define_unit("hectograms", "hg", 0.1, 0, this.areas);
-        UnitCollection.define_unit("hundredweights", "cwt", 50.80234544, 0, this.areas);
-        UnitCollection.define_unit("kilograms", "kg", 1, 0, this.areas);
-        UnitCollection.define_unit("kilotonnes", "kt", 1e6, 0, this.areas);
-        UnitCollection.define_unit("megatonnes", "Mt", 1e9, 0, this.areas);
-        UnitCollection.define_unit("micrograms", "Âµg", 1e-9, 0, this.areas);
-        UnitCollection.define_unit("milligrams", "mg", 1e-6, 0, this.areas);
-        UnitCollection.define_unit("nanograms", "ng", 1e-12, 0, this.areas);
-        UnitCollection.define_unit("ounces (US & UK)", "oz", 0.028349523125, 0, this.areas);
-        UnitCollection.define_unit("pounds (US & UK)", "lbs", 0.45359237, 0, this.areas);
-        UnitCollection.define_unit("stones", "st", 6.35029318, 0, this.areas);
-        UnitCollection.define_unit("tonnes (metric)", "t", 1000, 0, this.areas);
+        UnitCollection.define_unit("carats (metric)", "CD", 0.0002, 0, this.mass);
+        UnitCollection.define_unit("cental", "", 45.359237, 0, this.mass);
+        UnitCollection.define_unit("decagrams", "dag", 0.01, 0, this.mass);
+        UnitCollection.define_unit("femtograms", "fg", 1e-18, 0, this.mass);
+        UnitCollection.define_unit("grains", "gr", 0.00006479891, 0, this.mass);
+        UnitCollection.define_unit("grams", "g", 1e-3, 0, this.mass);
+        UnitCollection.define_unit("hectograms", "hg", 0.1, 0, this.mass);
+        UnitCollection.define_unit("hundredweights", "cwt", 50.80234544, 0, this.mass);
+        UnitCollection.define_unit("kilograms", "kg", 1, 0, this.mass);
+        UnitCollection.define_unit("kilotonnes", "kt", 1e6, 0, this.mass);
+        UnitCollection.define_unit("megatonnes", "Mt", 1e9, 0, this.mass);
+        UnitCollection.define_unit("micrograms", "Âµg", 1e-9, 0, this.mass);
+        UnitCollection.define_unit("milligrams", "mg", 1e-6, 0, this.mass);
+        UnitCollection.define_unit("nanograms", "ng", 1e-12, 0, this.mass);
+        UnitCollection.define_unit("ounces (US & UK)", "oz", 0.028349523125, 0, this.mass);
+        UnitCollection.define_unit("pounds (US & UK)", "lbs", 0.45359237, 0, this.mass);
+        UnitCollection.define_unit("stones", "st", 6.35029318, 0, this.mass);
+        UnitCollection.define_unit("tonnes (metric)", "t", 1000, 0, this.mass);
     }
 
     defineSpeed()
