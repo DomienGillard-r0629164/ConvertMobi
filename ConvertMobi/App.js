@@ -345,6 +345,17 @@ export class ExtraSpeedConverter extends React.Component {
   }
 
   render() {
+    let me = this;
+
+    function isValidNumber(s)
+    {
+      return !!/^\d+(\.\d*)?$/.exec(s);
+    }
+
+    console.log(`render(): this.state.leftValue = ${this.state.leftValue}`);
+
+    const canConvert = isValidNumber(this.state.leftValue);
+
     return (
       <View>
         <View>
@@ -378,7 +389,7 @@ export class ExtraSpeedConverter extends React.Component {
             </Picker>
           </View>
           <Text>{this.state.result}</Text>
-          <Button title="Convert" onPress={() => this.convert()} />
+          <Button title="Convert" onPress={() => this.convert()} disabled={!canConvert} />
         </View>
       </View>
     );
