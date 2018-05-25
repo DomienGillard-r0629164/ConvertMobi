@@ -102,8 +102,9 @@ export class Converter extends React.Component {
     const rightValue = 0;
     const leftUnit = "kN";
     const rightUnit = "kN";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
 
   render() {
@@ -157,8 +158,9 @@ export class AreaConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "square centimeters";
     const rightUnit = "square centimeters";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -177,8 +179,9 @@ export class LengthConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "centimeters";
     const rightUnit = "centimeters";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -198,8 +201,9 @@ export class MassConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "kilograms";
     const rightUnit = "kilograms";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -219,8 +223,9 @@ export class TimeConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "minutes";
     const rightUnit = "minutes";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -240,8 +245,9 @@ export class SpeedConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "kilometers/hour";
     const rightUnit = "kilometers/hour";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -261,8 +267,9 @@ export class ForceConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "kilonewtons";
     const rightUnit = "kilonewtons";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
   
   createUnits()
@@ -282,8 +289,9 @@ export class VolumeConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "liters";
     const rightUnit = "liters";
+    const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units}
+    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
   }
   
   createUnits()
@@ -303,8 +311,9 @@ export class TemperatureConverter extends Converter {
     const rightValue = 0;
     const leftUnit = "Kelvin";
     const rightUnit = "Kelvin";
+    const combinable = false;
     
-    this.state= { leftValue, rightValue, leftUnit, rightUnit, units };
+    this.state= { leftValue, rightValue, leftUnit, rightUnit, units, combinable };
   }
 
   createUnits()
