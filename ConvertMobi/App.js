@@ -2,94 +2,97 @@ import React from 'react';
 import { Component } from 'react';
 import { Dimensions, StyleSheet, SectionList, Text, View, Button, Alert, TextInput, Picker } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import {UnitCollection} from './Model';
+import { UnitCollection } from './Model';
 
 export class NavScreen extends React.Component {
   render() {
     return (
-      <View style={styles.nav}>
-        <View style={styles.subnav}>
-          <View style={styles.navbutton}>
-            <Button title="Length Converter" onPress={() => this.goToLengthConverter()} />
+      <View style={styles.secnav}>
+        <View style={styles.nav}>
+          <View style={styles.subnav}>
+            <View style={styles.navbutton}>
+              <Button title="Length Converter" onPress={() => this.goToConverter('Length')} />
+            </View>
+            <View style={styles.navbutton}>
+              <Button title="Area Converter" onPress={() => this.goToConverter('Area')}/>
+            </View>
+            <View style={styles.navbutton}>
+              <Button title="Mass Converter" onPress={() => this.goToConverter('Mass')} />
+            </View>
+            <View style={styles.navbutton}>
+              <Button title="Temperature Converter" onPress={() => this.goToConverter('Temperature')}/>
+            </View>
           </View>
-          <View style={styles.navbutton}>
-            <Button title="Area Converter" onPress={() => this.goToAreaConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Mass Converter" onPress={() => this.goToMassConverter()} />
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Temperature Converter" onPress={() => this.goToTemperatureConverter()}/>
+          <View style={styles.subnav}>
+            <View style={styles.navbutton}>
+              <Button title="Time Converter" onPress={() => this.goToConverter('Time')}/>
+            </View>
+            <View style={styles.navbutton}>
+              <Button title="Volume Converter" onPress={() => this.goToConverter('Volume')}/>
+            </View>
+            <View style={styles.navbutton}>
+              <Button title="Force Converter" onPress={() => this.goToConverter('Force')}/>
+            </View>
+            <View style={styles.navbutton}>
+              <Button title="Speed Converter" onPress={() => this.goToConverter('Speed')}/>
+            </View>
           </View>
         </View>
-        <View style={styles.subnav}>
-          <View style={styles.navbutton}>
-            <Button title="Time Converter" onPress={() => this.goToTimeConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Volume Converter" onPress={() => this.goToVolumeConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Force Converter" onPress={() => this.goToForceConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Speed Converter" onPress={() => this.goToSpeedConverter()}/>
-          </View>
-        </View>
-        <View style={styles.subnav}>
-          <View style={styles.navbutton}>
-            <Button title="Speed Extra Converter" onPress={() => this.goToSpeedExtraConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Converter" onPress={() => this.goToVolumeConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Converter" onPress={() => this.goToForceConverter()}/>
-          </View>
-          <View style={styles.navbutton}>
-            <Button title="Converter" onPress={() => this.goToSpeedConverter()}/>
-          </View>
+        <View style={styles.navbutton}>
+          <Button title="Custom Converter" onPress={() => this.goToConverter('CustomConverter')}/>
         </View>
       </View>
     );
   }
 
-  goToAreaConverter(){
-    this.props.navigation.navigate('Area');
+  goToConverter(converter){
+    this.props.navigation.navigate(converter);
   }
 
-  goToLengthConverter(){
-    this.props.navigation.navigate('Length');
+}
+
+export class CustomConverterScreen extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.state = { unit1: "length", unit2: "time", units: ["length", "time", "mass"] }
   }
 
-  goToMassConverter(){
-    this.props.navigation.navigate('Mass');
+  render(){
+    return (
+      <View>
+        <View>
+        <Picker selectedValue={this.state.unit1} onValueChange={(itemValue, itemIndex) => { this.setState({unit1: itemValue})} }>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item key={key} label={this.state.units[key]} value={this.state.units[key]}/>)
+            })}
+          </Picker>
+          <Picker selectedValue={this.state.unit2} onValueChange={(itemValue, itemIndex) => this.setState({unit2: itemValue})}>
+            {Object.keys(this.state.units).map((key) => {
+              return (<Picker.Item key={key} label={this.state.units[key]} value={this.state.units[key]}/>)
+            })}
+          </Picker>
+          <Button title="Build converter" onPress={() => this.goToConverter(this.state.unit1, this.state.unit2)}/>
+          
+          <View style={styles.textBlock}>
+            <Text>Speed = length / time</Text>  
+            <Text>Linear density = mass / length</Text>  
+          </View>
+        
+        </View>
+      </View>
+    )
   }
 
-  goToTimeConverter(){
-    this.props.navigation.navigate('Time');
+  goToConverter(unit1, unit2){
+    destination = "";
+    if(unit1 == "length" && unit2 == "time"){
+      destination = "CustomSpeed";
+    }else if(unit1 == "mass" && unit2 == "length"){
+      destination = "CustomLinearDensity";
+    }
+    this.props.navigation.navigate(destination);
   }
-
-  goToSpeedConverter(){
-    this.props.navigation.navigate('Speed');
-  }
-
-  goToForceConverter(){
-    this.props.navigation.navigate('Force');
-  }
-
-  goToSpeedExtraConverter(){
-    this.props.navigation.navigate('SpeedExtra');
-  }
-
-  goToTemperatureConverter(){
-    this.props.navigation.navigate('Temperature');
-  }
-
-  goToVolumeConverter(){
-    this.props.navigation.navigate('Volume');
-  }
-
 }
 
 export class Converter extends React.Component {
@@ -125,12 +128,12 @@ export class Converter extends React.Component {
           <TextInput value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
           <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => { this.setState({leftUnit: itemValue})} }>
             {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={key} value={key}/>)
+              return (<Picker.Item key={key} label={key} value={key}/>)
             })}
           </Picker>
           <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
             {Object.keys(this.state.units).map((key) => {
-              return (<Picker.Item label={key} value={key}/>)
+              return (<Picker.Item key={key} label={key} value={key}/>)
             })}
           </Picker>
           <Text>{this.state.rightValue}</Text>
@@ -145,6 +148,98 @@ export class Converter extends React.Component {
     const { factor: toValFactor } = this.state.units[this.state.rightUnit];
     
     this.setState({rightValue: (this.state.leftValue * fromValFactor) / toValFactor});
+  }
+}
+
+export class CustomConverter extends React.Component {
+  constructor(props)
+  {
+    super(props);
+    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", leftUnitList: [], rightUnitList: [] }
+  }
+
+  render() {
+    let me = this;
+
+    function isValidNumber(s)
+    {
+      return !!/^\d+(\.\d*)?$/.exec(s);
+    }
+
+    console.log(`render(): this.state.leftValue = ${this.state.leftValue}`);
+
+    const canConvert = isValidNumber(this.state.leftValue);
+
+    return (
+      <View>
+        <View>
+        <TextInput value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
+          <View style={styles.inline}>
+            <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit1} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit1: itemValue})}>
+              {Object.keys(this.state.leftUnitList).map((key) => {
+                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
+              })}
+            </Picker>
+            <Text>/</Text>
+            <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit1} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit1: itemValue})}>
+              {Object.keys(this.state.rightUnitList).map((key) => {
+                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
+                })}
+            </Picker>
+          </View>
+        </View>
+        <View>
+          <View style={styles.inline}>
+            <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit2} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit2: itemValue})}>
+              {Object.keys(this.state.leftUnitList).map((key) => {
+                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
+              })}
+            </Picker>
+            <Text>/</Text>
+            <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit2} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit2: itemValue})}>
+              {Object.keys(this.state.rightUnitList).map((key) => {
+                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
+                })}
+            </Picker>
+          </View>
+          <Text>{this.state.result}</Text>
+          <Button title="Convert" onPress={() => this.convert()} disabled={!canConvert} />
+        </View>
+      </View>
+    );
+  }
+
+  convert() {
+    var leftFromVal = 0
+    var rightFromVal = 0;
+    var leftToVal = 0
+    var rightToVal = 0;
+    for(var i = 0; i < this.state.leftUnitList.length; i++){
+      if(this.state.leftUnitList[i][1] == this.state.leftUnit1){
+        leftFromVal = parseFloat(this.state.leftUnitList[i][2]);
+      }
+      if(this.state.leftUnitList[i][1] == this.state.leftUnit2){
+        leftToVal = parseFloat(this.state.leftUnitList[i][2]);
+      }
+    }
+    for(var i = 0; i < this.state.rightUnitList.length; i++){
+      if(this.state.rightUnitList[i][1] == this.state.rightUnit1){
+        rightFromVal = parseFloat(this.state.rightUnitList[i][2]);
+      }
+      if(this.state.rightUnitList[i][1] == this.state.rightUnit2){
+        rightToVal = parseFloat(this.state.rightUnitList[i][2]);
+      }
+    }
+
+    var firstPart = leftFromVal / rightFromVal;
+    var secondPart = leftToVal / rightToVal;
+
+    var res = firstPart / secondPart;
+
+    var r = this.state.leftValue * res;
+
+    this.setState({result: r});
+
   }
 }
 
@@ -331,11 +426,11 @@ export class TemperatureConverter extends Converter {
 
 }
 
-export class ExtraSpeedConverter extends React.Component {
+export class CustomSpeedConverter extends CustomConverter {
   constructor(props)
   {
     super(props);
-    this.state = { rightValue: 1, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", 
+    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", 
       leftUnitList: [
         ["centimeters", "cm", 0.01], 
         ["feet",        "ft", 0.3048],
@@ -352,87 +447,28 @@ export class ExtraSpeedConverter extends React.Component {
       ]
     }
   }
+}
 
-  render() {
-    let me = this;
-
-    function isValidNumber(s)
-    {
-      return !!/^\d+(\.\d*)?$/.exec(s);
-    }
-
-    console.log(`render(): this.state.leftValue = ${this.state.leftValue}`);
-
-    const canConvert = isValidNumber(this.state.leftValue);
-
-    return (
-      <View>
-        <View>
-        <TextInput onChangeText={(leftValue) => this.setState({leftValue})} keyboardType='numeric'/>
-          <View style={styles.inline}>
-            <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit1} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit1: itemValue})}>
-              {Object.keys(this.state.leftUnitList).map((key) => {
-                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
-              })}
-            </Picker>
-            <Text>/</Text>
-            <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit1} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit1: itemValue})}>
-              {Object.keys(this.state.rightUnitList).map((key) => {
-                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
-                })}
-            </Picker>
-          </View>
-        </View>
-        <View>
-          <View style={styles.inline}>
-            <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit2} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit2: itemValue})}>
-              {Object.keys(this.state.leftUnitList).map((key) => {
-                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
-              })}
-            </Picker>
-            <Text>/</Text>
-            <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit2} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit2: itemValue})}>
-              {Object.keys(this.state.rightUnitList).map((key) => {
-                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
-                })}
-            </Picker>
-          </View>
-          <Text>{this.state.result}</Text>
-          <Button title="Convert" onPress={() => this.convert()} disabled={!canConvert} />
-        </View>
-      </View>
-    );
-  }
-
-  convert() {
-    var leftFromVal = 0
-    var rightFromVal = 0;
-    var leftToVal = 0
-    var rightToVal = 0;
-    for(var i = 0; i < this.state.leftUnitList.length; i++){
-      if(this.state.leftUnitList[i][1] == this.state.leftUnit1){
-        leftFromVal = parseFloat(this.state.leftUnitList[i][2]);
-      }
-      if(this.state.leftUnitList[i][1] == this.state.leftUnit2){
-        leftToVal = parseFloat(this.state.leftUnitList[i][2]);
-      }
-    }
-    for(var i = 0; i < this.state.rightUnitList.length; i++){
-      if(this.state.rightUnitList[i][1] == this.state.rightUnit1){
-        rightFromVal = parseFloat(this.state.rightUnitList[i][2]);
-      }
-      if(this.state.rightUnitList[i][1] == this.state.rightUnit2){
-        rightToVal = parseFloat(this.state.rightUnitList[i][2]);
-      }
-
-      var firstPart = leftFromVal / rightFromVal;
-      var secondPart = leftToVal / rightToVal;
-
-      var res = firstPart / secondPart;
-
-      var r = this.state.leftValue * res;
-
-      this.setState({result: r});
+export class CustomLinearDensityConverter extends CustomConverter {
+  constructor(props)
+  {
+    super(props);
+    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "g", rightUnit1: "cm", leftUnit2: "g", rightUnit2: "cm", 
+      leftUnitList: [
+        ["grams",             "g",    1e-3],
+        ["kilograms",         "kg",   1],
+        ["pounds (US & UK)",  "lbs",  0.45359237],
+        ["tonnes (metric)",   "t",    1000]
+      ],  
+      rightUnitList: [ 
+        ["centimeters", "cm", 0.01], 
+        ["feet",        "ft", 0.3048],
+        ["inches",      "in", 0.0254], 
+        ["kilometers",  "km", 1000], 
+        ["meters",      "m",  1], 
+        ["miles",       "mi", 1609.344], 
+        ["yards",       "yd", 0.9144]
+      ]
     }
   }
 }
@@ -447,7 +483,9 @@ export default App = StackNavigator({
     Force: {screen: ForceConverter},
     Temperature: {screen: TemperatureConverter},
     Volume: {screen: VolumeConverter},
-    SpeedExtra: {screen: ExtraSpeedConverter}
+    CustomConverter: {screen: CustomConverterScreen},
+    CustomSpeed: {screen: CustomSpeedConverter},
+    CustomLinearDensity: {screen: CustomLinearDensityConverter}
 });
 
 const styles = StyleSheet.create({
@@ -470,6 +508,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1
   },
+  secnav: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
   navbutton: {
     margin: 5,
     width: 120
@@ -484,5 +528,10 @@ const styles = StyleSheet.create({
   },
   inline: {
     flexDirection: 'row'
+  },
+  textBlock: {
+    margin: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
