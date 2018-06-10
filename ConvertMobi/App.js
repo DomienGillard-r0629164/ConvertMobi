@@ -430,8 +430,19 @@ export class CustomSpeedConverter extends CustomConverter {
   constructor(props)
   {
     super(props);
-    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", 
-      leftUnitList: [
+    var lefty = new LengthConverter();
+    const leftUnitList = lefty.units;
+    console.log("THE HILLS ARE ALIIIIVE");
+    console.log("THE HILLS ARE ALIIIIVE");
+    console.log("THE HILLS ARE ALIIIIVE");
+    console.log(leftUnitList);
+    console.log("THE HILLS ARE ALIIIIVE");
+    console.log("THE HILLS ARE ALIIIIVE");
+    var righty = new TimeConverter();
+    const rightUnitList = righty.units;
+    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec",
+     leftUnitList, rightUnitList }; 
+      /*leftUnitList: [
         ["centimeters", "cm", 0.01], 
         ["feet",        "ft", 0.3048],
         ["inches",      "in", 0.0254], 
@@ -445,7 +456,7 @@ export class CustomSpeedConverter extends CustomConverter {
         ["minutes", "min", 60], 
         ["hours",   "h",   3600]
       ]
-    }
+    }*/
   }
 }
 
