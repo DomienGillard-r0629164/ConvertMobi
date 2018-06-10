@@ -155,7 +155,20 @@ export class CustomConverter extends React.Component {
   constructor(props)
   {
     super(props);
-    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", leftUnitList: [], rightUnitList: [] }
+    //this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", leftUnitList: [], rightUnitList: [] }
+
+    const leftValue = 0;
+    const rightValue = 0;
+    const result = 0;
+    const leftUnit1 = "m";
+    const rightUnit1 = "sec";
+    const leftUnit2 = "m";
+    const rightUnit2 = "sec";
+    const leftUnitList = [];
+    const rightUnitList = [];
+
+    this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList }
+
   }
 
   render() {
@@ -177,13 +190,13 @@ export class CustomConverter extends React.Component {
           <View style={styles.inline}>
             <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit1} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit1: itemValue})}>
               {Object.keys(this.state.leftUnitList).map((key) => {
-                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
+                return (<Picker.Item key={key} label={key} value={key}/>)
               })}
             </Picker>
             <Text>/</Text>
             <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit1} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit1: itemValue})}>
               {Object.keys(this.state.rightUnitList).map((key) => {
-                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
+                  return (<Picker.Item key={key} label={key} value={key}/>)
                 })}
             </Picker>
           </View>
@@ -192,13 +205,13 @@ export class CustomConverter extends React.Component {
           <View style={styles.inline}>
             <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit2} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit2: itemValue})}>
               {Object.keys(this.state.leftUnitList).map((key) => {
-                return (<Picker.Item key={this.state.leftUnitList[key][0]} label={this.state.leftUnitList[key][0]} value={this.state.leftUnitList[key][1]}/>)
+                return (<Picker.Item key={key} label={key} value={key}/>)
               })}
             </Picker>
             <Text>/</Text>
             <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit2} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit2: itemValue})}>
               {Object.keys(this.state.rightUnitList).map((key) => {
-                  return (<Picker.Item key={this.state.rightUnitList[key][0]} label={this.state.rightUnitList[key][0]} value={this.state.rightUnitList[key][1]}/>)
+                  return (<Picker.Item key={key} label={key} value={key}/>)
                 })}
             </Picker>
           </View>
@@ -209,8 +222,17 @@ export class CustomConverter extends React.Component {
     );
   }
 
+  /*
   convert() {
-    var leftFromVal = 0
+    const { factor: fromValFactor } = this.state.units[this.state.leftUnit];
+    const { factor: toValFactor } = this.state.units[this.state.rightUnit];
+    
+    this.setState({rightValue: (this.state.leftValue * fromValFactor) / toValFactor});
+  }
+  */
+
+  convert() {
+    /*var leftFromVal = 0
     var rightFromVal = 0;
     var leftToVal = 0
     var rightToVal = 0;
@@ -229,7 +251,12 @@ export class CustomConverter extends React.Component {
       if(this.state.rightUnitList[i][1] == this.state.rightUnit2){
         rightToVal = parseFloat(this.state.rightUnitList[i][2]);
       }
-    }
+    }*/
+
+    const { factor: leftFromVal } = this.state.leftUnitList[this.state.leftUnit1];
+    const { factor: leftToVal } = this.state.leftUnitList[this.state.leftUnit2];
+    const { factor: rightFromVal } = this.state.rightUnitList[this.state.rightUnit1];
+    const { factor: rightToVal } = this.state.rightUnitList[this.state.rightUnit2];
 
     var firstPart = leftFromVal / rightFromVal;
     var secondPart = leftToVal / rightToVal;
@@ -427,7 +454,46 @@ export class TemperatureConverter extends Converter {
 }
 
 export class CustomSpeedConverter extends CustomConverter {
-  constructor(props)
+  constructor(props){
+    super(props);
+
+    const leftValue = 0;
+    const rightValue = 0;
+    const result = 0;
+    const leftUnit1 = "m";
+    const rightUnit1 = "sec";
+    const leftUnit2 = "m";
+    const rightUnit2 = "sec";
+    const leftUnitList = this.createLeftUnits();
+    const rightUnitList = this.createRightUnits();
+
+    console.log(leftUnitList);
+    console.log(rightUnitList);
+
+    this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList } 
+  }
+
+  /*const leftValue = 0;
+    const rightValue = 0;
+    const result = 0;
+    const leftUnit1 = "m";
+    const rightUnit1 = "sec";
+    const leftUnit2 = "m";
+    const rightUnit2 = "sec";
+    const leftUnitList = [];
+    const rightUnitList = [];
+
+    this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList }
+*/
+
+  createLeftUnits(){
+    return new UnitCollection().lengths;
+  }
+
+  createRightUnits(){
+    return new UnitCollection().times;
+  }
+  /*constructor(props)
   {
     super(props);
     var lefty = new LengthConverter();
@@ -456,8 +522,8 @@ export class CustomSpeedConverter extends CustomConverter {
         ["minutes", "min", 60], 
         ["hours",   "h",   3600]
       ]
-    }*/
-  }
+    }
+  }*/
 }
 
 export class CustomLinearDensityConverter extends CustomConverter {
