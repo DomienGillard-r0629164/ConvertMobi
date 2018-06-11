@@ -58,7 +58,22 @@ export class CustomConverterScreen extends React.Component {
     this.state = { unit1: "length", unit2: "time", units: ["length", "time", "mass"] }
   }
 
-  render(){
+  render(){   
+    let me = this;
+
+    function isValidCombination(unit1, unit2)
+    {
+      if(unit1 == "length" && unit2 == "time"){
+        return true;
+      }else if(unit1 == "mass" && unit2 == "length"){
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    const canConvert = isValidCombination(this.state.unit1, this.state.unit2);
+
     return (
       <View>
         <View>
@@ -72,11 +87,11 @@ export class CustomConverterScreen extends React.Component {
               return (<Picker.Item key={key} label={this.state.units[key]} value={this.state.units[key]}/>)
             })}
           </Picker>
-          <Button title="Build converter" onPress={() => this.goToConverter(this.state.unit1, this.state.unit2)}/>
+          <Button title="Build converter" onPress={() => this.goToConverter()} disabled={!canConvert}/>
           
           <View style={styles.textBlock}>
             <Text>Speed = length / time</Text>  
-            <Text>Linear density = mass / length</Text>  
+            <Text>Linear density = mass / length</Text>
           </View>
         
         </View>
@@ -84,11 +99,11 @@ export class CustomConverterScreen extends React.Component {
     )
   }
 
-  goToConverter(unit1, unit2){
+  goToConverter(){
     destination = "";
-    if(unit1 == "length" && unit2 == "time"){
+    if(this.state.unit1 == "length" && this.state.unit2 == "time"){
       destination = "CustomSpeed";
-    }else if(unit1 == "mass" && unit2 == "length"){
+    }else if(this.state.unit1 == "mass" && this.state.unit2 == "length"){
       destination = "CustomLinearDensity";
     }
     this.props.navigation.navigate(destination);
@@ -155,15 +170,14 @@ export class CustomConverter extends React.Component {
   constructor(props)
   {
     super(props);
-    //this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", leftUnitList: [], rightUnitList: [] }
 
     const leftValue = 0;
     const rightValue = 0;
     const result = 0;
-    const leftUnit1 = "m";
-    const rightUnit1 = "sec";
-    const leftUnit2 = "m";
-    const rightUnit2 = "sec";
+    const leftUnit1 = "meters";
+    const rightUnit1 = "seconds";
+    const leftUnit2 = "meters";
+    const rightUnit2 = "seconds";
     const leftUnitList = [];
     const rightUnitList = [];
 
@@ -178,8 +192,6 @@ export class CustomConverter extends React.Component {
     {
       return !!/^\d+(\.\d*)?$/.exec(s);
     }
-
-    console.log(`render(): this.state.leftValue = ${this.state.leftValue}`);
 
     const canConvert = isValidNumber(this.state.leftValue);
 
@@ -222,36 +234,7 @@ export class CustomConverter extends React.Component {
     );
   }
 
-  /*
   convert() {
-    const { factor: fromValFactor } = this.state.units[this.state.leftUnit];
-    const { factor: toValFactor } = this.state.units[this.state.rightUnit];
-    
-    this.setState({rightValue: (this.state.leftValue * fromValFactor) / toValFactor});
-  }
-  */
-
-  convert() {
-    /*var leftFromVal = 0
-    var rightFromVal = 0;
-    var leftToVal = 0
-    var rightToVal = 0;
-    for(var i = 0; i < this.state.leftUnitList.length; i++){
-      if(this.state.leftUnitList[i][1] == this.state.leftUnit1){
-        leftFromVal = parseFloat(this.state.leftUnitList[i][2]);
-      }
-      if(this.state.leftUnitList[i][1] == this.state.leftUnit2){
-        leftToVal = parseFloat(this.state.leftUnitList[i][2]);
-      }
-    }
-    for(var i = 0; i < this.state.rightUnitList.length; i++){
-      if(this.state.rightUnitList[i][1] == this.state.rightUnit1){
-        rightFromVal = parseFloat(this.state.rightUnitList[i][2]);
-      }
-      if(this.state.rightUnitList[i][1] == this.state.rightUnit2){
-        rightToVal = parseFloat(this.state.rightUnitList[i][2]);
-      }
-    }*/
 
     const { factor: leftFromVal } = this.state.leftUnitList[this.state.leftUnit1];
     const { factor: leftToVal } = this.state.leftUnitList[this.state.leftUnit2];
@@ -460,31 +443,15 @@ export class CustomSpeedConverter extends CustomConverter {
     const leftValue = 0;
     const rightValue = 0;
     const result = 0;
-    const leftUnit1 = "m";
-    const rightUnit1 = "sec";
-    const leftUnit2 = "m";
-    const rightUnit2 = "sec";
+    const leftUnit1 = "meters";
+    const rightUnit1 = "seconds";
+    const leftUnit2 = "meters";
+    const rightUnit2 = "seconds";
     const leftUnitList = this.createLeftUnits();
     const rightUnitList = this.createRightUnits();
 
-    console.log(leftUnitList);
-    console.log(rightUnitList);
-
     this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList } 
   }
-
-  /*const leftValue = 0;
-    const rightValue = 0;
-    const result = 0;
-    const leftUnit1 = "m";
-    const rightUnit1 = "sec";
-    const leftUnit2 = "m";
-    const rightUnit2 = "sec";
-    const leftUnitList = [];
-    const rightUnitList = [];
-
-    this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList }
-*/
 
   createLeftUnits(){
     return new UnitCollection().lengths;
@@ -493,49 +460,31 @@ export class CustomSpeedConverter extends CustomConverter {
   createRightUnits(){
     return new UnitCollection().times;
   }
-  /*constructor(props)
-  {
-    super(props);
-    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "m", rightUnit1: "sec", leftUnit2: "m", rightUnit2: "sec", 
-      leftUnitList: [
-        ["centimeters", "cm", 0.01], 
-        ["feet",        "ft", 0.3048],
-        ["inches",      "in", 0.0254], 
-        ["kilometers",  "km", 1000], 
-        ["meters",      "m",  1], 
-        ["miles",       "mi", 1609.344], 
-        ["yards",       "yd", 0.9144]
-      ],  
-      rightUnitList: [ 
-        ["seconds", "sec", 1],
-        ["minutes", "min", 60], 
-        ["hours",   "h",   3600]
-      ]
-    }
-  }*/
 }
 
 export class CustomLinearDensityConverter extends CustomConverter {
-  constructor(props)
-  {
+  constructor(props){
     super(props);
-    this.state = { leftValue: 0, rightValue: 0, result: 0, leftUnit1: "g", rightUnit1: "cm", leftUnit2: "g", rightUnit2: "cm", 
-      leftUnitList: [
-        ["grams",             "g",    1e-3],
-        ["kilograms",         "kg",   1],
-        ["pounds (US & UK)",  "lbs",  0.45359237],
-        ["tonnes (metric)",   "t",    1000]
-      ],  
-      rightUnitList: [ 
-        ["centimeters", "cm", 0.01], 
-        ["feet",        "ft", 0.3048],
-        ["inches",      "in", 0.0254], 
-        ["kilometers",  "km", 1000], 
-        ["meters",      "m",  1], 
-        ["miles",       "mi", 1609.344], 
-        ["yards",       "yd", 0.9144]
-      ]
-    }
+
+    const leftValue = 0;
+    const rightValue = 0;
+    const result = 0;
+    const leftUnit1 = "grams";
+    const rightUnit1 = "centimeters";
+    const leftUnit2 = "grams";
+    const rightUnit2 = "centimeters";
+    const leftUnitList = this.createLeftUnits();
+    const rightUnitList = this.createRightUnits();
+
+    this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList } 
+  }
+
+  createLeftUnits(){
+    return new UnitCollection().mass;
+  }
+
+  createRightUnits(){
+    return new UnitCollection().lengths;
   }
 }
 
