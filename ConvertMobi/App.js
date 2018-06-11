@@ -55,25 +55,10 @@ export class CustomConverterScreen extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = { unit1: "length", unit2: "time", units: ["length", "time", "mass"] }
+    this.state = { unit1: "length", unit2: "time", units: ["length", "time", "mass", "force", "volume", "area", "speed"] }
   }
 
-  render(){   
-    let me = this;
-
-    function isValidCombination(unit1, unit2)
-    {
-      if(unit1 == "length" && unit2 == "time"){
-        return true;
-      }else if(unit1 == "mass" && unit2 == "length"){
-        return true;
-      }else{
-        return false;
-      }
-    }
-
-    const canConvert = isValidCombination(this.state.unit1, this.state.unit2);
-
+  render(){
     return (
       <View>
         <View>
@@ -87,26 +72,14 @@ export class CustomConverterScreen extends React.Component {
               return (<Picker.Item key={key} label={this.state.units[key]} value={this.state.units[key]}/>)
             })}
           </Picker>
-          <Button title="Build converter" onPress={() => this.goToConverter()} disabled={!canConvert}/>
-          
-          <View style={styles.textBlock}>
-            <Text>Speed = length / time</Text>  
-            <Text>Linear density = mass / length</Text>
-          </View>
-        
+          <Button title="Build converter" onPress={() => this.goToConverter()}/>        
         </View>
       </View>
     )
   }
 
   goToConverter(){
-    destination = "";
-    if(this.state.unit1 == "length" && this.state.unit2 == "time"){
-      destination = "CustomSpeed";
-    }else if(this.state.unit1 == "mass" && this.state.unit2 == "length"){
-      destination = "CustomLinearDensity";
-    }
-    this.props.navigation.navigate(destination);
+    this.props.navigation.navigate("Custom", {leftUnit: this.state.unit1, rightUnit: this.state.unit2});
   }
 }
 
@@ -174,15 +147,90 @@ export class CustomConverter extends React.Component {
     const leftValue = 0;
     const rightValue = 0;
     const result = 0;
-    const leftUnit1 = "meters";
-    const rightUnit1 = "seconds";
-    const leftUnit2 = "meters";
-    const rightUnit2 = "seconds";
-    const leftUnitList = [];
-    const rightUnitList = [];
+    const leftUnit1 = this.fillLeftUnit();
+    const rightUnit1 = this.fillRightUnit();
+    const leftUnit2 = this.fillLeftUnit();
+    const rightUnit2 = this.fillRightUnit();
+    const leftUnitList = this.createLeftUnitList();
+    const rightUnitList = this.createRightUnitList();
 
     this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList }
+  }
 
+  createLeftUnitList(){
+    param = this.props.navigation.getParam("leftUnit");
+    if(param == "length"){
+      return new UnitCollection().lengths;
+    }else if(param == "time"){
+      return new UnitCollection().times;
+    }else if(param == "mass"){
+      return new UnitCollection().mass;
+    }else if(param == "force"){
+      return new UnitCollection().forces;
+    }else if(param == "volume"){
+      return new UnitCollection().volumes;
+    }else if(param == "area"){
+      return new UnitCollection().areas;
+    }else if(param == "speed"){
+      return new UnitCollection().speeds;
+    }
+  }
+
+  createRightUnitList(){
+    param = this.props.navigation.getParam("rightUnit");
+    if(param == "length"){
+      return new UnitCollection().lengths;
+    }else if(param == "time"){
+      return new UnitCollection().times;
+    }else if(param == "mass"){
+      return new UnitCollection().mass;
+    }else if(param == "force"){
+      return new UnitCollection().forces;
+    }else if(param == "volume"){
+      return new UnitCollection().volumes;
+    }else if(param == "area"){
+      return new UnitCollection().areas;
+    }else if(param == "speed"){
+      return new UnitCollection().speeds;
+    }
+  }
+
+  fillLeftUnit(){
+    param = this.props.navigation.getParam("leftUnit");
+    if(param == "length"){
+      return "meters";
+    }else if(param == "time"){
+      return "seconds";
+    }else if(param == "mass"){
+      return "grams";
+    }else if(param == "force"){
+      return "newtons";
+    }else if(param == "volume"){
+      return "liters";
+    }else if(param == "area"){
+      return "square centimeters";
+    }else if(param == "speed"){
+      return "meters/second";
+    }
+  }
+
+  fillRightUnit(){
+    param = this.props.navigation.getParam("rightUnit");
+    if(param == "length"){
+      return "meters";
+    }else if(param == "time"){
+      return "seconds";
+    }else if(param == "mass"){
+      return "grams";
+    }else if(param == "force"){
+      return "newtons";
+    }else if(param == "volume"){
+      return "liters";
+    }else if(param == "area"){
+      return "square centimeters";
+    }else if(param == "speed"){
+      return "meters/second";
+    }
   }
 
   render() {
@@ -498,6 +546,7 @@ export default App = StackNavigator({
     Force: {screen: ForceConverter},
     Temperature: {screen: TemperatureConverter},
     Volume: {screen: VolumeConverter},
+    Custom: {screen: CustomConverter},
     CustomConverter: {screen: CustomConverterScreen},
     CustomSpeed: {screen: CustomSpeedConverter},
     CustomLinearDensity: {screen: CustomLinearDensityConverter}
