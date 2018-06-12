@@ -56,6 +56,7 @@ export class CustomConverterScreen extends React.Component {
     super(props);
 
     this.state = { unit1: "length", unit2: "time", units: ["length", "time", "mass", "force", "volume", "area", "speed"] }
+    
   }
 
   render(){
