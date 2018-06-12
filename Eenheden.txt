@@ -1,6 +1,5 @@
 ﻿Dit is de html van de site waar ik dit allemaal op gevonden heb: https://www.digitaldutch.com/unitconverter/unitconverter.js?v=13
 
-
 var quantities = [
   { name:             'Angle',
     description:      'Convert angle measurements like degrees, radians, circles, turns.',
