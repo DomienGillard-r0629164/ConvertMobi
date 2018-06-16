@@ -1,8 +1,62 @@
 import React from 'react';
-import { Component } from 'react';
-import { Dimensions, StyleSheet, SectionList, Text, View, Button, Alert, TextInput, Picker } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Picker } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { UnitCollection } from './Model';
+
+const styles = StyleSheet.create({
+  default: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  leftward: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginHorizontal: 10,
+  },
+  nav: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
+  secnav: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
+  navbutton: {
+    margin: 5,
+    width: 120
+  },
+  custombutton: {
+    marginTop: 0,
+    marginBottom: 100,
+    width: 120
+  },
+  leftPicker: {
+    margin: 10,
+    width: 150
+  },
+  rightPicker: {
+    margin: 10,
+    width: 150
+  },
+  inline: {
+    flexDirection: 'row'
+  },
+  margins: {
+    marginBottom: 10,
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
 
 export class NavScreen extends React.Component {
   render() {
@@ -38,7 +92,7 @@ export class NavScreen extends React.Component {
             </View>
           </View>
         </View>
-        <View style={styles.navbutton}>
+        <View style={styles.custombutton}>
           <Button title="Custom Converter" onPress={() => this.goToConverter('CustomConverter')}/>
         </View>
       </View>
@@ -114,18 +168,23 @@ export class Converter extends React.Component {
     return (
       <View>
         <View>
-          <TextInput value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
+          <View style={[styles.inline, styles.center]}>
+            <TextInput style={[{width: 100}, styles.margins]} value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
+            <Text>{this.state.leftUnit}</Text>
+          </View>
           <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => { this.setState({leftUnit: itemValue})} }>
             {Object.keys(this.state.units).map((key) => {
               return (<Picker.Item key={key} label={key} value={key}/>)
             })}
           </Picker>
-          <Picker selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
+          <Picker style={styles.margins} selectedValue={this.state.rightUnit} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit: itemValue})}>
             {Object.keys(this.state.units).map((key) => {
               return (<Picker.Item key={key} label={key} value={key}/>)
             })}
           </Picker>
-          <Text>{this.state.rightValue}</Text>
+          <View style={styles.center}>
+            <Text style={styles.margins} >{this.state.rightValue} {this.state.rightUnit}</Text>
+          </View>
           <Button title="Convert" onPress={() => this.convert()} disabled={!canConvert} />
         </View>
       </View>
@@ -246,15 +305,18 @@ export class CustomConverter extends React.Component {
 
     return (
       <View>
-        <View>
-        <TextInput value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
+        <View>   
+          <View style={[styles.inline, styles.center]}>
+            <TextInput style={{width: 100}} value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
+            <Text>{this.state.leftUnit1}/{this.state.rightUnit1}</Text>
+          </View> 
           <View style={styles.inline}>
             <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit1} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit1: itemValue})}>
               {Object.keys(this.state.leftUnitList).map((key) => {
                 return (<Picker.Item key={key} label={key} value={key}/>)
               })}
             </Picker>
-            <Text>/</Text>
+            <Text style={{marginTop: 30}}>/</Text>
             <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit1} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit1: itemValue})}>
               {Object.keys(this.state.rightUnitList).map((key) => {
                   return (<Picker.Item key={key} label={key} value={key}/>)
@@ -269,14 +331,16 @@ export class CustomConverter extends React.Component {
                 return (<Picker.Item key={key} label={key} value={key}/>)
               })}
             </Picker>
-            <Text>/</Text>
+            <Text style={{marginTop: 30}}>/</Text>
             <Picker style={styles.rightPicker} selectedValue={this.state.rightUnit2} onValueChange={(itemValue, itemIndex) => this.setState({rightUnit2: itemValue})}>
               {Object.keys(this.state.rightUnitList).map((key) => {
                   return (<Picker.Item key={key} label={key} value={key}/>)
                 })}
             </Picker>
           </View>
-          <Text>{this.state.result}</Text>
+          <View style={styles.center}>
+            <Text style={styles.margins}>{this.state.result} {this.state.leftUnit2}/{this.state.rightUnit2}</Text>
+          </View>
           <Button title="Convert" onPress={() => this.convert()} disabled={!canConvert} />
         </View>
       </View>
@@ -499,50 +563,4 @@ export default App = StackNavigator({
     CustomConverter: {screen: CustomConverterScreen}
 });
 
-const styles = StyleSheet.create({
-  default: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  leftward: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginHorizontal: 10,
-  },
-  nav: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1
-  },
-  secnav: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1
-  },
-  navbutton: {
-    margin: 5,
-    width: 120
-  },
-  leftPicker: {
-    margin: 10,
-    width: 150
-  },
-  rightPicker: {
-    margin: 10,
-    width: 150
-  },
-  inline: {
-    flexDirection: 'row'
-  },
-  textBlock: {
-    margin: 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});
+
