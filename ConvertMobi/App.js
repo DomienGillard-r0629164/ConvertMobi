@@ -146,11 +146,12 @@ export class Converter extends React.Component {
     const units = [];
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "kN";
     const rightUnit = "kN";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
 
   render() {
@@ -161,9 +162,12 @@ export class Converter extends React.Component {
       return !!/^\d+(\.\d*)?$/.exec(s);
     }
 
-    console.log(`render(): this.state.leftValue = ${this.state.leftValue}`);
+    function isValidInteger(s)
+    {
+      return ((!!/^\d+$/.exec(s) && s <= 12) || s == "");
+    }
 
-    const canConvert = isValidNumber(this.state.leftValue);
+    const canConvert = (isValidNumber(this.state.leftValue) && isValidInteger(this.state.rounding));
 
     return (
       <View>
@@ -171,6 +175,10 @@ export class Converter extends React.Component {
           <View style={[styles.inline, styles.center]}>
             <TextInput style={[{width: 100}, styles.margins]} value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
             <Text>{this.state.leftUnit}</Text>
+          </View>
+          <View style={[styles.inline, styles.center]}>
+            <TextInput style={[{width: 100}, styles.margins]} value={"" + this.state.rounding} onChangeText={(s) => this.setState({rounding: s})} keyboardType='numeric'/>
+            <Text>Decimals (0-12)</Text>
           </View>
           <Picker selectedValue={this.state.leftUnit} onValueChange={(itemValue, itemIndex) => { this.setState({leftUnit: itemValue})} }>
             {Object.keys(this.state.units).map((key) => {
@@ -195,7 +203,11 @@ export class Converter extends React.Component {
     const { factor: fromValFactor } = this.state.units[this.state.leftUnit];
     const { factor: toValFactor } = this.state.units[this.state.rightUnit];
     const endValue = this.state.leftValue * fromValFactor / toValFactor;
-    this.setState({rightValue: ((this.state.leftValue * fromValFactor) / toValFactor).toFixed(3)});
+    if (this.state.rounding == null) {
+      this.setState({rightValue: ((this.state.leftValue * fromValFactor) / toValFactor)});
+    } else {
+      this.setState({rightValue: ((this.state.leftValue * fromValFactor) / toValFactor).toFixed(this.state.rounding)});
+    }
   }
 }
 
@@ -206,6 +218,7 @@ export class CustomConverter extends React.Component {
 
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const result = 0;
     const leftUnit1 = this.fillLeftUnit();
     const rightUnit1 = this.fillRightUnit();
@@ -214,7 +227,7 @@ export class CustomConverter extends React.Component {
     const leftUnitList = this.createLeftUnitList();
     const rightUnitList = this.createRightUnitList();
 
-    this.state = { leftValue, rightValue, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList }
+    this.state = { leftValue, rightValue, rounding, result, leftUnit1, rightUnit1, leftUnit2, rightUnit2, leftUnitList, rightUnitList }
   }
 
   createLeftUnitList(){
@@ -300,8 +313,12 @@ export class CustomConverter extends React.Component {
     {
       return !!/^\d+(\.\d*)?$/.exec(s);
     }
+    function isValidInteger(s)
+    {
+      return ((!!/^\d+$/.exec(s) && s <= 12) || s == "");
+    }
 
-    const canConvert = isValidNumber(this.state.leftValue);
+    const canConvert = (isValidNumber(this.state.leftValue) && isValidInteger(this.state.rounding));
 
     return (
       <View>
@@ -309,6 +326,10 @@ export class CustomConverter extends React.Component {
           <View style={[styles.inline, styles.center]}>
             <TextInput style={{width: 100}} value={"" + this.state.leftValue} onChangeText={(s) => this.setState({leftValue: s})} keyboardType='numeric'/>
             <Text>{this.state.leftUnit1}/{this.state.rightUnit1}</Text>
+          </View>
+          <View style={[styles.inline, styles.center]}>
+            <TextInput style={[{width: 100}, styles.margins]} value={"" + this.state.rounding} onChangeText={(s) => this.setState({rounding: s})} keyboardType='numeric'/>
+            <Text>Decimals (0-12)</Text>
           </View> 
           <View style={styles.inline}>
             <Picker style={styles.leftPicker} selectedValue={this.state.leftUnit1} onValueChange={(itemValue, itemIndex) => this.setState({leftUnit1: itemValue})}>
@@ -360,8 +381,12 @@ export class CustomConverter extends React.Component {
     var res = firstPart / secondPart;
 
     var r = this.state.leftValue * res;
-
-    this.setState({result: (r).toFixed(3)});
+    if (this.state.rounding == null) {
+      this.setState({result: r});
+    } else {
+      this.setState({result: (r).toFixed(this.state.rounding)});
+    }
+    
 
   }
 }
@@ -372,13 +397,14 @@ export class AreaConverter extends Converter {
     super(props);
     
     const units = this.createUnits();
-    leftValue = 0;
-    rightValue = 0;
+    const leftValue = 0;
+    const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "square centimeters";
     const rightUnit = "square centimeters";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -395,11 +421,12 @@ export class LengthConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "centimeters";
     const rightUnit = "centimeters";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -417,11 +444,12 @@ export class MassConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "kilograms";
     const rightUnit = "kilograms";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -439,11 +467,12 @@ export class TimeConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "minutes";
     const rightUnit = "minutes";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -461,11 +490,12 @@ export class SpeedConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "kilometers/hour";
     const rightUnit = "kilometers/hour";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
 
   createUnits()
@@ -483,11 +513,12 @@ export class ForceConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "kilonewtons";
     const rightUnit = "kilonewtons";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
   
   createUnits()
@@ -505,11 +536,12 @@ export class VolumeConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "liters";
     const rightUnit = "liters";
     const combinable = true;
 
-    this.state = { leftValue, rightValue, leftUnit, rightUnit, units, combinable }
+    this.state = { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable }
   }
   
   createUnits()
@@ -527,11 +559,12 @@ export class TemperatureConverter extends Converter {
     const units = this.createUnits();
     const leftValue = 0;
     const rightValue = 0;
+    const rounding = 5;
     const leftUnit = "Kelvin";
     const rightUnit = "Kelvin";
     const combinable = false;
     
-    this.state= { leftValue, rightValue, leftUnit, rightUnit, units, combinable };
+    this.state= { leftValue, rightValue, rounding, leftUnit, rightUnit, units, combinable };
   }
 
   createUnits()
@@ -544,7 +577,11 @@ export class TemperatureConverter extends Converter {
     const { factor: toValFactor, constant: toValTerm } = this.state.units[this.state.rightUnit];
     
     let inKelvin = (parseFloat(this.state.leftValue) + fromValTerm) * fromValFactor;
-    this.setState({rightValue: ((inKelvin / toValFactor) - toValTerm).toFixed(3)});
+    if (this.state.rounding == null) {
+      this.setState({rightValue: (inKelvin / toValFactor) - toValTerm});
+    } else {
+      this.setState({rightValue: ((inKelvin / toValFactor) - toValTerm).toFixed(this.state.rounding)});
+    }
   }
 
 }
